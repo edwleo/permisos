@@ -138,7 +138,7 @@
             </li>
 
             <li class="nav-item">
-              <a href="#" class="nav-link">
+              <a href="<?= SERVERURL ?>views/permisos/lista-permiso" class="nav-link">
                 <i class="nav-icon fas fa-th"></i>
                 <p>
                   Permisos
