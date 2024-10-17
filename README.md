@@ -30,5 +30,5 @@ class MiClase{
 }
 ```
 
-[!IMPORTANT]
-No olvidar utilizar el sistema de control de versión
+> [!IMPORTANT]
+> No olvidar utilizar el sistema de control de versión
