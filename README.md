@@ -6,8 +6,8 @@ Esta plantilla ha sido administrada utilizando **código backend** PHP
 Tecnologías utilizadas:
 - PHP 8 *(Arquitectura MVC)*
 - AdminLTE
-- Bootstrap
-- jQuery
+- Bootstrap 👍
+- jQuery 😁
 
 ```
 Esta es una cita importante, documenta información sobre Software
