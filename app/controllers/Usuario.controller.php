@@ -1,7 +1,20 @@
 <?php
+session_start();
 
 require_once "../models/Usuario.php";
 $usuario = new Usuario();
+
+//Variable/arreglo de sesión que guarde información de acceso
+if (!isset($_SESSION['login']) || $_SESSION['login']['status'] == false){
+  $_SESSION['login'] = [
+    "status"      => false,
+    "idusuario"   => -1,
+    "apellidos"   => "",
+    "nombres"     => "",
+    "perfil"      => "",
+    "nomuser"     => ""
+  ];
+}
 
 //Comunicación E/S JSON
 header('Content-Type: application/json; charset=utf-8');
@@ -36,6 +49,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
         //La contraseña es correcta
         $statusLogin["esCorrecto"] = true;
         $statusLogin["mensaje"] = "Bienvenido";
+
+        //Actualizar los datos de la variable de sesión
+        $_SESSION["login"]["status"] = true;
+        $_SESSION["login"]["idusuario"] =  $registro[0]['idusuario'];
+        $_SESSION["login"]["apellidos"] =  $registro[0]['apellidos'];
+        $_SESSION["login"]["nombres"] =  $registro[0]['nombres'];
+        $_SESSION["login"]["perfil"] =  $registro[0]['perfil'];
+        $_SESSION["login"]["nomuser"] =  $registro[0]['nomuser'];
+
       }else{
         //La contraseña es INcorrecta
         $statusLogin["mensaje"] = "Contraseña incorrecta";
@@ -47,3 +69,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
 
   } //Operation = Login
 }// REQUEST_METHOD
+
+//GET en la URL
+if ($_SERVER["REQUEST_METHOD"] == "GET"){
+  if ($_GET["operation"] == "destroy"){
+    session_destroy();
+    session_unset();
+    header("Location: ../../");
+  }
+}

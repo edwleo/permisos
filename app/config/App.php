@@ -28,3 +28,20 @@ function renderContentHeader($title, $home, $path){
   </div>
   ";
 }
+
+//Qué opciones e interfaces podrá utilizar el usuario
+$permisos = [
+  "ADM" => [
+    ["vista" => "permisos", "ruta" => "lista-permiso"],
+    ["vista" => "colaboradores", "ruta" => "lista-colaborador"],
+    ["vista" => "reportes", "ruta" => "lista-reporte"],
+    ["vista" => "horarios", "ruta" => "lista-horario"]
+  ],
+  "SPV" => [
+    ["vista" => "permisos", "ruta" => "lista-permiso"],
+    ["vista" => "reportes", "ruta" => "lista-reporte"]
+  ],
+  "INV" => [
+    ["vista" => "horarios", "ruta" => "lista-horario"]
+  ]
+];

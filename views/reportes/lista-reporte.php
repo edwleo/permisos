@@ -31,6 +31,14 @@ require_once "../includes/header.php";
 
             <div class="card-body">
               
+              <?php
+              //BLOQUE EXPERIMENTAL, LUEGO BORRE
+              $url = $_SERVER["REQUEST_URI"];
+              $arreglo = explode("/", $url); //se debe comparar con 
+              
+              var_dump($arreglo);
+              ?>
+
             </div> <!-- ./card-body -->
           </div> <!-- ./card -->
         </div> <!-- ./col-md-12 -->
