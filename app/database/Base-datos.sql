@@ -45,8 +45,8 @@ CREATE TABLE usuarios
     create_at 		DATETIME 		NOT NULL DEFAULT NOW(),
     update_at 		DATETIME 		NULL,
     inactive_at		DATETIME 		NULL,
-    CONSTRAINT fk_idpersona_usu FOREIGN KEY (idpersona) REFERENCES personas (idpersona),
-    CONSTRAINT uk_idpersona_usu UNIQUE (idpersona),
+    CONSTRAINT fk_idpersona_usu FOREIGN KEY (idpersona) REFERENCES personas (idpersona), 
+    CONSTRAINT uk_idpersona_usu UNIQUE (idpersona), -- Uno a Uno
     CONSTRAINT fk_idperfil_usu FOREIGN KEY (idperfil) REFERENCES perfiles (idperfil),
     CONSTRAINT uk_nomuser_usu UNIQUE (nomuser)
 )ENGINE = INNODB;
@@ -58,6 +58,8 @@ INSERT INTO usuarios (idpersona, idperfil, nomuser, passuser)
         (2, 2, 'Karina', '123'),
         (3, 3, 'Carlos', '123');
 
--- SELECT * FROM usuarios;
+UPDATE usuarios SET passuser = '$2y$10$2bLM5P3czoCxOgUzUiczb.I9v7zCrNCTHHypgQqxI7dS7fPzy6jXm' WHERE idusuario = 1;
+UPDATE usuarios SET passuser = '$2y$10$mN17BrRISm3N0Yo/DjF8YebEudo7rMKdHRdCa/yfatEbD3zPHOS9S' WHERE idusuario = 2;
+UPDATE usuarios SET passuser = '$2y$10$zLZfCqnbfLatck7P7uCzBOyRFTFYK437m2m05H7k3uYz1Zzx8Va/.' WHERE idusuario = 3;
 
 

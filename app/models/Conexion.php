@@ -1,7 +1,7 @@
 <?php
 
 const SERVER = "localhost";
-const DB = "";
+const DB = "dbasistencia";
 const USER = "root";
 const PASS = "";
 //Cadena de conexión
