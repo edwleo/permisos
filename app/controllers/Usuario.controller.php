@@ -1,8 +1,45 @@
 <?php
-session_start();
+session_start(); //Crea o hereda la sesión
 
 require_once "../models/Usuario.php";
 $usuario = new Usuario();
+
+//Arreglo para manejo de perfiles
+//Módulo    : cada carpeta en views/
+//ruta      : cada vista (UNIQUE) omitir la extensión
+//visible   : se renderizará en el sidebar
+//texto     : info a mostrar en el sidebar (solo si visible es true)
+//icono     : info a mostrar en el sidebar (solo si visible es true)
+$accesos = [
+  "ADM" => [
+    ["modulo" => "home", "ruta" => "welcome", "visible" => false, "texto" => "", "icono" => ""],
+
+    ["modulo" => "colaboradores", "ruta" => "actualiza-colaborador", "visible" => false, "texto" => "", "icono" => ""],
+    ["modulo" => "colaboradores", "ruta" => "lista-colaborador", "visible" => true, "texto" => "Colaborador", "icono" => "nav-icon fas fa-th"],
+    ["modulo" => "colaboradores", "ruta" => "registra-colaborador", "visible" => false, "texto" => "", "icono" => ""],
+
+    ["modulo" => "horarios", "ruta" => "lista-horario", "visible" => true, "texto" => "Horarios", "icono" => "nav-icon fas fa-th"],
+    ["modulo" => "horarios", "ruta" => "registra-horario", "visible" => false, "texto" => "", "icono" => ""],
+
+    ["modulo" => "permisos", "ruta" => "lista-permiso", "visible" => true, "texto" => "Permisos", "icono" => "nav-icon fas fa-th"],
+    ["modulo" => "permisos", "ruta" => "registra-permiso", "visible" => false, "texto" => "", "icono" => ""],
+
+    ["modulo" => "reportes", "ruta" => "lista-reporte", "visible" => true, "texto" => "Reportes", "icono" => "nav-icon fas fa-th"]
+  ],
+  "SPV" => [
+    ["modulo" => "home", "ruta" => "welcome", "visible" => false, "texto" => "", "icono" => ""],
+    ["modulo" => "colaboradores", "ruta" => "lista-colaborador", "visible" => true, "texto" => "Colaborador", "icono" => "nav-icon fas fa-th"],
+    ["modulo" => "horarios", "ruta" => "lista-horario", "visible" => true, "texto" => "Horarios", "icono" => "nav-icon fas fa-th"],
+    ["modulo" => "horarios", "ruta" => "registra-horario", "visible" => false, "texto" => "", "icono" => ""],
+    ["modulo" => "permisos", "ruta" => "lista-permiso", "visible" => true, "texto" => "Permisos", "icono" => "nav-icon fas fa-th"]
+  ],
+  "INV" => [
+    ["modulo" => "home", "ruta" => "welcome", "visible" => false, "texto" => "", "icono" => ""],
+    ["modulo" => "horarios", "ruta" => "lista-horario", "visible" => true, "texto" => "Horarios", "icono" => "nav-icon fas fa-th"],
+    ["modulo" => "permisos", "ruta" => "lista-permiso", "visible" => true, "texto" => "Permisos", "icono" => "nav-icon fas fa-th"]
+  ]
+];
+//Fin de arreglo de perfiles
 
 //Variable/arreglo de sesión que guarde información de acceso
 if (!isset($_SESSION['login']) || $_SESSION['login']['status'] == false){
@@ -12,11 +49,12 @@ if (!isset($_SESSION['login']) || $_SESSION['login']['status'] == false){
     "apellidos"   => "",
     "nombres"     => "",
     "perfil"      => "",
-    "nomuser"     => ""
+    "nomuser"     => "",
+    "permisos"    => []
   ];
 }
 
-//Comunicación E/S JSON
+//Comunicación E/S JSON -- Salidas: XML, PDF, TXT, XLS
 header('Content-Type: application/json; charset=utf-8');
 
 //GET = Buscadores, listas, filtros, consultas...
@@ -25,9 +63,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
 
   if ($_POST['operation'] == 'login'){
     //Obteniendo datos del origen (VISTA)
-    $nomuser = $usuario->limpiarCadena($_POST['nomuser']);
-    $passuser = $usuario->limpiarCadena($_POST['passuser']);
-    $claveEncriptada = "";
+    $nomuser = $usuario->limpiarCadena($_POST['nomuser']); //Form login
+    $passuser = $usuario->limpiarCadena($_POST['passuser']); //Form login
+    $claveEncriptada = ""; //BD
 
     //Arreglo que sirve para comunicarse con el usuario
     $statusLogin = [
@@ -48,7 +86,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
       if (password_verify($passuser, $claveEncriptada)){
         //La contraseña es correcta
         $statusLogin["esCorrecto"] = true;
-        $statusLogin["mensaje"] = "Bienvenido";
+        $statusLogin["mensaje"] = "Bienvenido a SENATI";
 
         //Actualizar los datos de la variable de sesión
         $_SESSION["login"]["status"] = true;
@@ -57,6 +95,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
         $_SESSION["login"]["nombres"] =  $registro[0]['nombres'];
         $_SESSION["login"]["perfil"] =  $registro[0]['perfil'];
         $_SESSION["login"]["nomuser"] =  $registro[0]['nomuser'];
+        //Enviamos todos los accesos en función del perfil...
+        $_SESSION["login"]["permisos"] = $accesos[$registro[0]['nombrecorto']];
 
       }else{
         //La contraseña es INcorrecta

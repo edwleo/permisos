@@ -4,6 +4,27 @@ session_start();
 if (!isset($_SESSION['login']) || $_SESSION['login']['status'] == false) {
   header("Location: " . SERVERURL);
 }
+
+//Obtener el perfil del usuario 
+$listapermisos = $_SESSION['login']['permisos'];
+
+//Obtener la vista y validar con "listaPermisos"
+$urlCompleta = $_SERVER['REQUEST_URI'];
+$arrayURL = explode("/", $urlCompleta);
+$vistaActual = end($arrayURL);
+
+$encontrado = false; //bandera
+foreach($listapermisos as $permiso){
+  if ($vistaActual == $permiso['ruta']){
+    $encontrado = true;
+  }
+}
+
+//El usuario ha intentado ingresar a una vista que no le corresponde
+if (!$encontrado){
+  header("Location: " . SERVERURL . "views/home/welcome");
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -27,6 +48,7 @@ if (!isset($_SESSION['login']) || $_SESSION['login']['status'] == false) {
 </head>
 
 <body class="hold-transition sidebar-mini">
+
   <div class="wrapper">
 
     <!-- Navbar -->
@@ -116,7 +138,7 @@ if (!isset($_SESSION['login']) || $_SESSION['login']['status'] == false) {
             <i class="fa-solid fa-person-running"></i>
           </a>
         </li>
-        
+
       </ul>
     </nav>
     <!-- /.navbar -->
@@ -136,41 +158,26 @@ if (!isset($_SESSION['login']) || $_SESSION['login']['status'] == false) {
           <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
             <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-            <li class="nav-item">
-              <a href="<?= SERVERURL ?>views/horarios/lista-horario" class="nav-link">
-                <i class="nav-icon fas fa-th"></i>
-                <p>
-                  Horarios
-                </p>
-              </a>
-            </li>
+            <?php
+            //Las opciones del SIDEBAR se renderizan de forma automática (en función del PERFIL)
+            $vista = "";
+            foreach ($listapermisos as $permiso) {
+              if ($permiso['visible'] == true) {
+                $vista = SERVERURL . "views/" . $permiso['modulo'] . "/" . $permiso['ruta'];
+                echo "
+                <li class='nav-item'>
+                  <a href='{$vista}' class='nav-link'>
+                    <i class='{$permiso['icono']}'></i>
+                    <p>
+                    {$permiso['texto']}
+                    </p>
+                  </a>
+                </li>
+                ";
+              }
+            }
+            ?>
 
-            <li class="nav-item">
-              <a href="<?= SERVERURL ?>views/colaboradores/lista-colaborador" class="nav-link">
-                <i class="nav-icon fas fa-th"></i>
-                <p>
-                  Colaboradores
-                </p>
-              </a>
-            </li>
-
-            <li class="nav-item">
-              <a href="<?= SERVERURL ?>views/permisos/lista-permiso" class="nav-link">
-                <i class="nav-icon fas fa-th"></i>
-                <p>
-                  Permisos
-                </p>
-              </a>
-            </li>
-
-            <li class="nav-item">
-              <a href="<?= SERVERURL ?>views/reportes/lista-reporte" class="nav-link">
-                <i class="nav-icon fas fa-th"></i>
-                <p>
-                  Reportes
-                </p>
-              </a>
-            </li>
           </ul>
         </nav>
         <!-- /.sidebar-menu -->

@@ -58,6 +58,7 @@ INSERT INTO usuarios (idpersona, idperfil, nomuser, passuser)
         (2, 2, 'Karina', '123'),
         (3, 3, 'Carlos', '123');
 
+-- clave: nomuser+123
 UPDATE usuarios SET passuser = '$2y$10$2bLM5P3czoCxOgUzUiczb.I9v7zCrNCTHHypgQqxI7dS7fPzy6jXm' WHERE idusuario = 1;
 UPDATE usuarios SET passuser = '$2y$10$mN17BrRISm3N0Yo/DjF8YebEudo7rMKdHRdCa/yfatEbD3zPHOS9S' WHERE idusuario = 2;
 UPDATE usuarios SET passuser = '$2y$10$zLZfCqnbfLatck7P7uCzBOyRFTFYK437m2m05H7k3uYz1Zzx8Va/.' WHERE idusuario = 3;

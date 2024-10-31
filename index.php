@@ -123,7 +123,7 @@ if (isset($_SESSION['login']) && $_SESSION['login']['status'] == true){
         if (!data.esCorrecto){
           showToast(data.mensaje, 'WARNING');
         }else{
-          showToast(data.mensaje, 'SUCCESS', 2000, './views');
+          showToast(data.mensaje, 'SUCCESS', 1000, './views/home/welcome');
         }
       });
 
