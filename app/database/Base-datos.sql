@@ -63,4 +63,37 @@ UPDATE usuarios SET passuser = '$2y$10$2bLM5P3czoCxOgUzUiczb.I9v7zCrNCTHHypgQqxI
 UPDATE usuarios SET passuser = '$2y$10$mN17BrRISm3N0Yo/DjF8YebEudo7rMKdHRdCa/yfatEbD3zPHOS9S' WHERE idusuario = 2;
 UPDATE usuarios SET passuser = '$2y$10$zLZfCqnbfLatck7P7uCzBOyRFTFYK437m2m05H7k3uYz1Zzx8Va/.' WHERE idusuario = 3;
 
+/* ACTUALIZACIÓN */
+
+CREATE TABLE modulos
+(
+	idmodulo 			INT AUTO_INCREMENT PRIMARY KEY,
+    modulo 				VARCHAR(100) 	NOT NULL,
+    create_at 			DATETIME 		NOT NULL DEFAULT NOW(),
+    CONSTRAINT uk_modulo_mod UNIQUE (modulo)
+)ENGINE = INNODB;
+
+CREATE TABLE rutas
+(
+	idruta 				INT AUTO_INCREMENT PRIMARY KEY,
+    idmodulo 			INT 			NOT NULL,
+    ruta 				VARCHAR(100)	NOT NULL,
+    isvisible 			CHAR(1) 		NOT NULL,
+    texto 				VARCHAR(30) 	NULL,
+    icono 				VARCHAR(30) 	NULL,
+    CONSTRAINT fk_idmodulo_rta FOREIGN KEY (idmodulo) REFERENCES modulos (idmodulo),
+    CONSTRAINT uk_ruta_rta UNIQUE (ruta),
+    CONSTRAINT ck_isvisible_rta CHECK (isvisible IN ('S','N'))
+)ENGINE = INNODB;
+
+CREATE TABLE permisos
+(
+	idpermiso 			INT AUTO_INCREMENT PRIMARY KEY,
+    idperfil 			INT 			NOT NULL,
+    idruta 				INT 			NOT NULL,
+    create_at 			DATETIME NOT NULL DEFAULT NOW(),
+    CONSTRAINT fk_idperfil_per FOREIGN KEY (idperfil) REFERENCES perfiles (idperfil),
+    CONSTRAINT fk_idruta_per FOREIGN KEY (idruta) REFERENCES rutas (idruta),
+    CONSTRAINT uk_idruta_per UNIQUE (idperfil, idruta)
+)ENGINE = INNODB;
 

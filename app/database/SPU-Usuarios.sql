@@ -5,6 +5,9 @@ USE dbasistencia;
 -- Store Procedure
 -- ORM
 
+CALL spu_usuarios_login('karina');
+SELECT * FROM perfiles;
+
 DROP PROCEDURE IF EXISTS `spu_usuarios_login`;
 DELIMITER //
 CREATE PROCEDURE spu_usuarios_login(IN _nomuser VARCHAR(20))
